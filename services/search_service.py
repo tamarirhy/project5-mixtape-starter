@@ -6,7 +6,7 @@ Handles song search logic.
 
 from app import db
 from models import Song, Tag, song_tags
-
+from sqlalchemy import or_
 
 def search_songs(query: str) -> list[dict]:
     """
@@ -24,15 +24,17 @@ def search_songs(query: str) -> list[dict]:
     """
     results = (
         db.session.query(Song)
-        .outerjoin(song_tags, Song.id == song_tags.c.song_id)
+        .join(song_tags, Song.id == song_tags.c.song_id)
+        .join(Tag, Tag.id == song_tags.c.tag_id)
         .filter(
-            db.or_(
+            or_(
                 Song.title.ilike(f"%{query}%"),
                 Song.artist.ilike(f"%{query}%"),
-            )
+                Tag.name.ilike(f"%{query}%"),
         )
-        .all()
     )
+    .all()
+)
 
     return [song.to_dict() for song in results]
 
