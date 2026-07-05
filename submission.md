@@ -200,3 +200,9 @@ I replaced `songs[:-1]` with `songs`. I verified:
 
 * all songs now appear
 * ordering remains unchanged
+
+## Git Log Screenshot
+
+The required git log screenshot is included in this repository:
+
+- `commit.png`
